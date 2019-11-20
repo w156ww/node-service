@@ -15,7 +15,7 @@ const router = require('./service/01-router/index');
 
 app.use(router);
 
-
+require('./db-helper/index');
 
 
 app.listen(3000, () => {

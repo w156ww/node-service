@@ -1,4 +1,4 @@
-const dbHelper = require("../../../infrastructure/db-helper/index")
+// const dbHelper = require("../../../infrastructure/db-helper/index")
 
 // 插入配置
 function insertProjectSetting(payload) {
