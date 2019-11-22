@@ -56,7 +56,7 @@ function getResCodeInfo(code) {
  */
 function getSuccessResult(data, exMsg = '', code = RESPONSE_CODES.CODE_200.code) {
     const resCodeInfo = getResCodeInfo(code);
-
+    console.log(data);
     return JSON.stringify({code, data, msg: `${resCodeInfo.message}.${exMsg}`});
 }
 
