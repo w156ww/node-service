@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 
-const example = require('./example');
 const user = require('./distribute');
 
 /*
@@ -13,7 +12,6 @@ router.get("/getInfo", function (req, res) {
     res.send("122")
 })*/
 
-example.reqDistribute(router);
 user.reqDistribute(router);
 
 module.exports = router;

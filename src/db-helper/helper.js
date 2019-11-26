@@ -1,4 +1,5 @@
 const {User} = require('./model/index');
+const responseStatus = require('./response-status');
 
 function handleError(err) {
     return Promise.reject(err);
@@ -10,14 +11,33 @@ function handleSuccess(data) {
 
 
 function login(req) {
+
     console.log(req);
-    return User.findOne({account: req.userName, password: req.password}, function (err, user) {
-        if (err) return handleError(err);
-        return handleSuccess({
-            data: {
-                success: true
+
+    const {account, password} = req;
+
+    return new Promise((resolve, reject) => {
+
+        User.findOne({account}, function (err, user) {
+
+            if (err) return reject(err);
+
+            if (!user) {
+
+                resolve(responseStatus.loginFail);
+            } else {
+
+                if (password !== user.password) {
+
+                    resolve(responseStatus.loginFail);
+                } else {
+
+                    resolve(responseStatus.loginSuccess);
+                }
+
             }
-        });
+
+        })
     })
 }
 
@@ -25,30 +45,37 @@ function login(req) {
 function register(req, res) {
 
     console.log(req);
+
+    const {account, password} = req;
+
     return new Promise((resolve, reject) => {
-        User.findOne({account: req.userName}, function (err, user) {
+
+        User.findOne({account: account}, function (err, user) {
+
             if (err) return reject(err);
+
             console.log('find user::', user);
 
-            const data = {
-                success: true
-            };
+            if (user) {
 
-            resolve(data);
+                resolve(responseStatus.registered);
+
+            } else {
+
+                User.create({
+                    account,
+                    password
+                }).then((err, result) => {
+                    if (err) {
+                        resolve(responseStatus.registerFail);
+                    } else {
+                        resolve(responseStatus.registerSuccess);
+                    }
+                })
+            }
 
         })
     })
-    // return User.findOne({account: req.userName}, function (err, user) {
-    //     if (err) return handleError(err);
-    //     console.log('find user::', user);
-    //
-    //     const data = {
-    //         success: true
-    //     };
-    //
-    //     res.send(res.getSuccessResult(data))
-    //
-    // })
 }
 
 
